@@ -58,12 +58,25 @@ class NotesState extends State<Notes> {
               ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 10,
+                  itemCount: 3,
                   itemBuilder: (context, index) {
                     isFavourite.add(false);
                     return noteItem(index);
                   }),
             ],
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(50.0),
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Colors.grey[200],
+          child: const Icon(
+            Icons.add,
+            color: Colors.grey,
+            size: 30,
           ),
         ),
       ),
