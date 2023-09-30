@@ -14,6 +14,15 @@ class NewNoteState extends State<NewNote> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 3,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: const Text(
           "Add Note",
           style: TextStyle(

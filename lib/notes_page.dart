@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/new_note.dart';
 
 class Notes extends StatefulWidget {
   const Notes({super.key});
@@ -71,7 +72,18 @@ class NotesState extends State<Notes> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(50.0),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            try {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return const NewNote();
+                }),
+              );
+            } catch (error) {
+              print("Error is $error");
+            }
+          },
           backgroundColor: Colors.grey[200],
           child: const Icon(
             Icons.add,

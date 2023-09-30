@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'new_note.dart';
+import 'notes_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,7 +11,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: NewNote(),
+      home: Notes(),
       debugShowCheckedModeBanner: false,
     );
   }
