@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
-class NewNote extends StatefulWidget {
-  const NewNote({super.key});
+class NewNote extends StatelessWidget {
+  Database dataObject;
 
-  @override
-  State<NewNote> createState() => NewNoteState();
-}
+  NewNote({super.key, required this.dataObject});
 
-class NewNoteState extends State<NewNote> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
+  String title = "";
+  String note = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +55,7 @@ class NewNoteState extends State<NewNote> {
                 height: 20,
               ),
               TextFormField(
-                onFieldSubmitted: (value) {},
+                controller: titleController,
                 decoration: InputDecoration(
                   filled: true,
                   hintStyle: TextStyle(color: Colors.grey[600]),
@@ -77,7 +80,7 @@ class NewNoteState extends State<NewNote> {
                 height: 30,
               ),
               TextFormField(
-                onFieldSubmitted: (value) {},
+                controller: noteController,
                 maxLines: 10,
                 decoration: InputDecoration(
                   filled: true,
@@ -100,7 +103,25 @@ class NewNoteState extends State<NewNote> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20.0),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            if (titleController.text.isEmpty || noteController.text.isEmpty) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertDialog(
+                      title: Text("Alert"),
+                      content: Text(
+                          "Please Make sure to fill the title or note area"),
+                    );
+                  });
+            } else {
+              title = titleController.text;
+              note = noteController.text;
+              titleController.clear();
+              noteController.clear();
+              insertToDB().then((value) => Navigator.pop(context));
+            }
+          },
           backgroundColor: Colors.grey[200],
           child: const Icon(
             Icons.edit,
@@ -110,5 +131,13 @@ class NewNoteState extends State<NewNote> {
         ),
       ),
     );
+  }
+
+  Future<void> insertToDB() async {
+    try {
+      await dataObject.insert("notes", {"Title": title, "Note": note});
+    } catch (error) {
+      print("Error in insert is $error");
+    }
   }
 }
