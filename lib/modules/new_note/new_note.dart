@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
+
+import '../../constants/constants.dart';
 
 class NewNote extends StatelessWidget {
-  Database dataObject;
-
-  NewNote({super.key, required this.dataObject});
+  NewNote({super.key});
 
   TextEditingController titleController = TextEditingController();
   TextEditingController noteController = TextEditingController();
@@ -117,9 +116,11 @@ class NewNote extends StatelessWidget {
             } else {
               title = titleController.text;
               note = noteController.text;
-              titleController.clear();
-              noteController.clear();
-              insertToDB().then((value) => Navigator.pop(context));
+              // titleController.clear();
+              // noteController.clear();
+              DBHelper()
+                  .insertToDB(title, note)
+                  .then((value) => Navigator.pop(context));
             }
           },
           backgroundColor: Colors.grey[200],
@@ -131,13 +132,5 @@ class NewNote extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> insertToDB() async {
-    try {
-      await dataObject.insert("notes", {"Title": title, "Note": note});
-    } catch (error) {
-      print("Error in insert is $error");
-    }
   }
 }

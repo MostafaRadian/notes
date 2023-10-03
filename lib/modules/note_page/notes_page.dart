@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/constants/constants.dart';
 import 'package:notes_app/modules/new_note/new_note.dart';
 import 'package:notes_app/modules/note_details/note_details.dart';
-import 'package:sqflite/sqflite.dart';
 
 class Notes extends StatefulWidget {
   const Notes({super.key});
@@ -11,20 +11,22 @@ class Notes extends StatefulWidget {
 }
 
 class NotesState extends State<Notes> {
-  List<Map<String, dynamic>> notes = [];
+  List<Map<String, dynamic>>? notes = [];
   List<bool> isFavourite = [];
-  late Database dataObject;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    createDB().then((value) => getDataFromDB());
+    // TODO: implement initState
+
+    DBHelper().getDataFromDB().then((value) {
+      notes = value;
+      print(notes);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    getDataFromDB();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -78,21 +80,27 @@ class NotesState extends State<Notes> {
               const SizedBox(
                 height: 40,
               ),
-              if (notes.isNotEmpty)
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: notes.length,
-                  itemBuilder: (context, index) {
-                    isFavourite.add(false);
-                    return noteItem(index);
-                  },
-                )
-              else
-                const Text(
-                  'No notes yet? Add more today!',
-                  style: TextStyle(color: Colors.grey),
-                ),
+              FutureBuilder(
+                  future: DBHelper().getDataFromDB(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      notes = snapshot.data!;
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: notes?.length,
+                        itemBuilder: (context, index) {
+                          isFavourite.add(false);
+                          return noteItem(index);
+                        },
+                      );
+                    } else {
+                      return const Text(
+                        'No notes yet? Add more today!',
+                        style: TextStyle(color: Colors.grey),
+                      );
+                    }
+                  })
             ],
           ),
         ),
@@ -105,7 +113,7 @@ class NotesState extends State<Notes> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return NewNote(dataObject: dataObject);
+                return NewNote();
               }),
             );
           },
@@ -141,13 +149,13 @@ class NotesState extends State<Notes> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => NoteDetail(
-                          title: notes[index]['title'],
-                          note: notes[index]['note']),
+                          title: notes?[index]['title'],
+                          note: notes?[index]['note']),
                     ),
                   );
                 },
                 child: Text(
-                  "${notes[index]['title']}",
+                  "${notes?[index]['title']}",
                   style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -173,31 +181,5 @@ class NotesState extends State<Notes> {
         )
       ],
     );
-  }
-
-  Future<void> createDB() async {
-    print('Creating database...');
-    try {
-      openDatabase(
-        "notes.db",
-        version: 1,
-        onCreate: (db, version) async {
-          await db.execute(
-            'CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Note TEXT)',
-          );
-        },
-      ).then((value) => dataObject = value);
-    } catch (error) {
-      print("error in creation is $error");
-    }
-    print('Database created.');
-  }
-
-  Future<void> getDataFromDB() async {
-    try {
-      notes = await dataObject.query('notes');
-    } catch (error) {
-      print("error in select is $error");
-    }
   }
 }
