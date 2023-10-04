@@ -14,6 +14,7 @@ class Notes extends StatefulWidget {
 class NotesState extends State<Notes> {
   List<Map<String, dynamic>>? notes = [];
   List<bool> isFavourite = [];
+  List<String> result = [];
 
   @override
   void initState() {
@@ -112,13 +113,15 @@ class NotesState extends State<Notes> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(50.0),
         child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            result = await Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
                 return NewNote();
               }),
             );
+            print(result);
+            DBHelper.insertToDB(result[0], result[1]);
           },
           backgroundColor: Colors.grey[200],
           child: const Icon(

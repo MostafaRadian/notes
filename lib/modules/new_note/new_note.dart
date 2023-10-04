@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../models/database_helper.dart';
-
 class NewNote extends StatelessWidget {
   NewNote({super.key});
 
@@ -118,8 +116,7 @@ class NewNote extends StatelessWidget {
               note = noteController.text;
               // titleController.clear();
               // noteController.clear();
-              DBHelper.insertToDB(title, note)
-                  .then((value) => Navigator.pop(context));
+              Navigator.pop(context, [title, note]);
             }
           },
           backgroundColor: Colors.grey[200],
