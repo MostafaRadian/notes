@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/constants/constants.dart';
 import 'package:notes_app/modules/new_note/new_note.dart';
 import 'package:notes_app/modules/note_details/note_details.dart';
+
+import '../../models/database_helper.dart';
 
 class Notes extends StatefulWidget {
   const Notes({super.key});
@@ -19,9 +20,11 @@ class NotesState extends State<Notes> {
     super.initState();
     // TODO: implement initState
 
-    DBHelper().getDataFromDB().then((value) {
-      notes = value;
-      print(notes);
+    DBHelper.getDataFromDB().then((value) {
+      setState(() {
+        notes = value;
+      });
+      print(notes?[0]["title"]);
     });
   }
 
@@ -81,7 +84,7 @@ class NotesState extends State<Notes> {
                 height: 40,
               ),
               FutureBuilder(
-                  future: DBHelper().getDataFromDB(),
+                  future: DBHelper.getDataFromDB(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       notes = snapshot.data!;
