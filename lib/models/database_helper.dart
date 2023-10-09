@@ -12,7 +12,6 @@ class DBHelper {
     } else {
       try {
         String path = "${await getDatabasesPath()}/notes.db";
-        print(path);
         db = await openDatabase(
           path,
           version: 1,
@@ -20,7 +19,6 @@ class DBHelper {
             await db.execute(
               'CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Note TEXT)',
             );
-            insertToDB("Test", "Testing");
           },
         );
       } catch (error) {
@@ -39,6 +37,7 @@ class DBHelper {
   }
 
   static Future<List<Map<String, dynamic>>?> getDataFromDB() async {
-    return await db?.query('notes');
+    var result = await db?.query('notes');
+    return result;
   }
 }

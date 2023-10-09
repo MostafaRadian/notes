@@ -15,22 +15,17 @@ class NotesState extends State<Notes> {
   List<Map<String, dynamic>>? notes = [];
   List<bool> isFavourite = [];
   List<String> result = [];
+  bool isDBEmpty = true;
 
   @override
   void initState() {
     super.initState();
     // TODO: implement initState
-
-    DBHelper.getDataFromDB().then((value) {
-      setState(() {
-        notes = value;
-      });
-      print(notes?[0]["title"]);
-    });
+    print("initState");
   }
 
   @override
-  Widget build(BuildContext context) {
+  Scaffold build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -47,7 +42,13 @@ class NotesState extends State<Notes> {
         ),
         actions: [
           IconButton(
-              onPressed: () {
+              onPressed: () async {
+                notes = await DBHelper.getDataFromDB();
+                if (notes != null || notes!.isNotEmpty) {
+                  isDBEmpty = false;
+                } else {
+                  isDBEmpty = true;
+                }
                 setState(() {});
               },
               icon: const Icon(
@@ -84,27 +85,15 @@ class NotesState extends State<Notes> {
               const SizedBox(
                 height: 40,
               ),
-              FutureBuilder(
-                  future: DBHelper.getDataFromDB(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      notes = snapshot.data!;
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: notes?.length,
-                        itemBuilder: (context, index) {
-                          isFavourite.add(false);
-                          return noteItem(index);
-                        },
-                      );
-                    } else {
-                      return const Text(
-                        'No notes yet? Add more today!',
-                        style: TextStyle(color: Colors.grey),
-                      );
-                    }
-                  })
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: notes!.length,
+                itemBuilder: (context, index) {
+                  isFavourite.add(false);
+                  return noteItem(index, notes![index]);
+                },
+              )
             ],
           ),
         ),
@@ -120,8 +109,7 @@ class NotesState extends State<Notes> {
                 return NewNote();
               }),
             );
-            print(result);
-            DBHelper.insertToDB(result[0], result[1]);
+            await DBHelper.insertToDB(result[0], result[1]);
           },
           backgroundColor: Colors.grey[200],
           child: const Icon(
@@ -134,7 +122,7 @@ class NotesState extends State<Notes> {
     );
   }
 
-  Widget noteItem(int index) {
+  Widget noteItem(int index, Map result) {
     return Column(
       children: [
         Container(
@@ -155,13 +143,12 @@ class NotesState extends State<Notes> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => NoteDetail(
-                          title: notes?[index]['title'],
-                          note: notes?[index]['note']),
+                          title: result['Title'], note: result['Note']),
                     ),
                   );
                 },
                 child: Text(
-                  "${notes?[index]['title']}",
+                  "${result['Title']}",
                   style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
