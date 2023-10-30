@@ -18,13 +18,6 @@ class NotesState extends State<Notes> {
   bool isDBEmpty = true;
 
   @override
-  void initState() {
-    super.initState();
-    // TODO: implement initState
-    print("initState");
-  }
-
-  @override
   Scaffold build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -147,12 +140,18 @@ class NotesState extends State<Notes> {
                     ),
                   );
                 },
-                child: Text(
-                  "${result['Title']}",
-                  style: const TextStyle(
+                child: SizedBox(
+                  width: 200,
+                  child: Text(
+                    "${result['Title']}",
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
               IconButton(
