@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/modules/new_note/new_note.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app/modules/note_details/note_details.dart';
 
-import '../../models/database_helper.dart';
+import '../../models/notes_cubit.dart';
 
 class Notes extends StatefulWidget {
   const Notes({super.key});
@@ -12,10 +12,11 @@ class Notes extends StatefulWidget {
 }
 
 class NotesState extends State<Notes> {
-  List<Map<String, dynamic>>? notes = [];
-  List<bool> isFavourite = [];
-  List<String> result = [];
-  bool isDBEmpty = true;
+  @override
+  void initState() {
+    BlocProvider.of<NotesCubit>(context).getNotes();
+    super.initState();
+  }
 
   @override
   Scaffold build(BuildContext context) {
@@ -35,15 +36,7 @@ class NotesState extends State<Notes> {
         ),
         actions: [
           IconButton(
-              onPressed: () async {
-                notes = await DBHelper.getDataFromDB();
-                if (notes != null || notes!.isNotEmpty) {
-                  isDBEmpty = false;
-                } else {
-                  isDBEmpty = true;
-                }
-                setState(() {});
-              },
+              onPressed: () {},
               icon: const Icon(
                 Icons.refresh,
                 color: Colors.black,
@@ -78,13 +71,23 @@ class NotesState extends State<Notes> {
               const SizedBox(
                 height: 40,
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: notes!.length,
-                itemBuilder: (context, index) {
-                  isFavourite.add(false);
-                  return noteItem(index, notes![index]);
+              BlocBuilder<NotesCubit, NoteState>(
+                builder: (context, state) {
+                  if (state.isDBEmpty) {
+                    return const Text(
+                      "Add new notes to start!",
+                      style: TextStyle(color: Colors.grey),
+                    );
+                  } else {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.notes?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return noteItem(index, state.notes![index]);
+                      },
+                    );
+                  }
                 },
               )
             ],
@@ -95,14 +98,8 @@ class NotesState extends State<Notes> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(50.0),
         child: FloatingActionButton(
-          onPressed: () async {
-            result = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return NewNote();
-              }),
-            );
-            await DBHelper.insertToDB(result[0], result[1]);
+          onPressed: () {
+            Navigator.pushNamed(context, '/new_note');
           },
           backgroundColor: Colors.grey[200],
           child: const Icon(
@@ -156,13 +153,19 @@ class NotesState extends State<Notes> {
               ),
               IconButton(
                 onPressed: () {
-                  setState(() {
-                    isFavourite[index] = !isFavourite[index];
-                  });
+                  BlocProvider.of<NotesCubit>(context).changeFavourite(index);
                 },
-                icon: Icon(
-                  isFavourite[index] ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.redAccent,
+                icon: BlocBuilder<NotesCubit, NoteState>(
+                  builder: (context, state) {
+                    if (state.isFavourite[index]) {
+                      return const Icon(Icons.favorite,
+                          color: Colors.redAccent);
+                    } else {
+                      return const Icon(
+                        Icons.favorite_border,
+                      );
+                    }
+                  },
                 ),
               )
             ],

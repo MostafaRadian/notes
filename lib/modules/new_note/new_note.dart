@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../models/notes_cubit.dart';
 
 class NewNote extends StatelessWidget {
   NewNote({super.key});
@@ -30,7 +33,28 @@ class NewNote extends StatelessWidget {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                if (titleController.text.isEmpty ||
+                    noteController.text.isEmpty) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertDialog(
+                          title: Text("Alert"),
+                          content: Text(
+                              "Please Make sure to fill the title or note area"),
+                        );
+                      });
+                } else {
+                  title = titleController.text;
+                  note = noteController.text;
+                  BlocProvider.of<NotesCubit>(context).addNote(title, note);
+                  BlocProvider.of<NotesCubit>(context).state.isDBEmpty = true;
+                  titleController.clear();
+                  noteController.clear();
+                  return Navigator.pop(context);
+                }
+              },
               icon: const Icon(
                 Icons.save,
                 color: Colors.black,
@@ -93,37 +117,6 @@ class NewNote extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: FloatingActionButton(
-          onPressed: () {
-            if (titleController.text.isEmpty || noteController.text.isEmpty) {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const AlertDialog(
-                      title: Text("Alert"),
-                      content: Text(
-                          "Please Make sure to fill the title or note area"),
-                    );
-                  });
-            } else {
-              title = titleController.text;
-              note = noteController.text;
-              // titleController.clear();
-              // noteController.clear();
-              Navigator.pop(context, [title, note]);
-            }
-          },
-          backgroundColor: Colors.grey[200],
-          child: const Icon(
-            Icons.edit,
-            color: Colors.grey,
-            size: 30,
           ),
         ),
       ),
