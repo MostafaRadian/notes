@@ -15,10 +15,14 @@ dependencies:
   meta: 1.10.0
   path: ^1.8.3
 
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "/Users/mostafaahmed/Documents/Flutter projects/notes_app/assets/4371209.png"
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
-
+  flutter_launcher_icons: ^0.13.1
 flutter:
   uses-material-design: true
