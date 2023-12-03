@@ -1,43 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes_app/modules/note_details/note_details.dart';
 
 import '../../models/notes_cubit.dart';
+import '../note_details/note_details.dart';
 
-class Notes extends StatefulWidget {
-  const Notes({super.key});
+class NotesFavourite extends StatefulWidget {
+  const NotesFavourite({super.key});
 
   @override
-  State<Notes> createState() => NotesState();
+  State<NotesFavourite> createState() => _NotesFavouriteState();
 }
 
-class NotesState extends State<Notes> {
-  int indx = 0;
+class _NotesFavouriteState extends State<NotesFavourite> {
   @override
-  void initState() {
-    BlocProvider.of<NotesCubit>(context).getNotes();
-    super.initState();
-  }
-
-  @override
-  Scaffold build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/fav_note');
-          },
-          icon: const Icon(
-            Icons.book_outlined,
-            color: Colors.black,
-            size: 30,
-          ),
+        leading: const Icon(
+          Icons.book_sharp,
+          color: Colors.black,
+          size: 30,
         ),
         title: const Text(
-          "All Notes",
+          "Favourite Notes",
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -77,14 +65,30 @@ class NotesState extends State<Notes> {
                       style: TextStyle(color: Colors.grey),
                     );
                   } else {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: state.notes?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        return noteItem(index, state.notes![index]);
-                      },
-                    );
+                    List<Map<String, dynamic>> favouriteNotes = [];
+                    List<int> favouriteIndices = [];
+                    for (int index = 0; index < state.notes!.length; index++) {
+                      if (state.isFavourite[index]) {
+                        favouriteNotes.add(state.notes![index]);
+                        favouriteIndices.add(index);
+                      }
+                    }
+                    if (favouriteIndices.isNotEmpty) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: favouriteNotes.length,
+                        itemBuilder: (context, index) {
+                          return noteItem(
+                              favouriteNotes[index], favouriteIndices[index]);
+                        },
+                      );
+                    } else {
+                      return const Text(
+                        "Add your favourite notes here!",
+                        style: TextStyle(color: Colors.grey),
+                      );
+                    }
                   }
                 },
               )
@@ -97,11 +101,11 @@ class NotesState extends State<Notes> {
         padding: const EdgeInsets.all(50.0),
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/new_note');
+            Navigator.pushNamed(context, '/');
           },
           backgroundColor: Colors.grey[200],
           child: const Icon(
-            Icons.add,
+            Icons.home,
             color: Colors.grey,
             size: 30,
           ),
@@ -110,7 +114,7 @@ class NotesState extends State<Notes> {
     );
   }
 
-  Widget noteItem(int index, Map result) {
+  Widget noteItem(Map result, int favouriteIndex) {
     return Column(
       children: [
         Container(
@@ -151,11 +155,12 @@ class NotesState extends State<Notes> {
               ),
               IconButton(
                 onPressed: () {
-                  BlocProvider.of<NotesCubit>(context).changeFavourite(index);
+                  BlocProvider.of<NotesCubit>(context)
+                      .changeFavourite(favouriteIndex);
                 },
                 icon: BlocBuilder<NotesCubit, NoteState>(
                   builder: (context, state) {
-                    if (state.isFavourite[index]) {
+                    if (state.isFavourite[favouriteIndex]) {
                       return const Icon(Icons.favorite,
                           color: Colors.redAccent);
                     } else {

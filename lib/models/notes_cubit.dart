@@ -50,17 +50,6 @@ class NotesCubit extends Cubit<NoteState> {
     );
   }
 
-  // void changeFavourite(int index) {
-  //   state.isFavourite[index] = !state.isFavourite[index];
-  //   emit(
-  //     NoteState(
-  //       notes: state.notes,
-  //       isDBEmpty: state.isDBEmpty,
-  //       isFavourite: state.isFavourite,
-  //     ),
-  //   );
-  // }
-
   Future<void> changeFavourite(int index) async {
     final List<bool> updatedFavourites = List.from(state.isFavourite);
     updatedFavourites[index] = !updatedFavourites[index];

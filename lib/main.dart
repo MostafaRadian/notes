@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes_app/modules/note_favourite/notes_favourite.dart';
 
 import 'models/database_helper.dart';
 import 'models/notes_cubit.dart';
@@ -36,6 +37,10 @@ class _MainAppState extends State<MainApp> {
                 value: _notesCubit,
                 child: NewNote(),
               ),
+          '/fav_note': (context) => BlocProvider.value(
+                value: _notesCubit,
+                child: const NotesFavourite(),
+              )
         },
         debugShowCheckedModeBanner: false,
       ),

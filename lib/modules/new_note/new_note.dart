@@ -40,9 +40,9 @@ class NewNote extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return const AlertDialog(
-                          title: Text("Alert"),
+                          title: Text("Attention"),
                           content: Text(
-                              "Please Make sure to fill the title or note area"),
+                              "Please Make sure to fill the title and note area"),
                         );
                       });
                 } else {
