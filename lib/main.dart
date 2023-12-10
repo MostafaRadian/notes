@@ -13,43 +13,21 @@ Future<void> main() async {
   runApp(const MainApp());
 }
 
-class MainApp extends StatefulWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
-
-  @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  final NotesCubit _notesCubit = NotesCubit();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NotesCubit(),
+      create: (context) => NotesCubit()..getNotes(),
       child: MaterialApp(
         routes: {
-          '/': (context) => BlocProvider.value(
-                value: _notesCubit,
-                child: const Notes(),
-              ),
-          '/new_note': (context) => BlocProvider.value(
-                value: _notesCubit,
-                child: NewNote(),
-              ),
-          '/fav_note': (context) => BlocProvider.value(
-                value: _notesCubit,
-                child: const NotesFavourite(),
-              )
+          '/': (context) => const Notes(),
+          '/new_note': (context) => NewNote(),
+          '/fav_note': (context) => const NotesFavourite(),
         },
         debugShowCheckedModeBanner: false,
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _notesCubit.close();
-    super.dispose();
   }
 }

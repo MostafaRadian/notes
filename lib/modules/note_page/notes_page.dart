@@ -4,23 +4,11 @@ import 'package:notes_app/modules/note_details/note_details.dart';
 
 import '../../models/notes_cubit.dart';
 
-class Notes extends StatefulWidget {
+class Notes extends StatelessWidget {
   const Notes({super.key});
 
   @override
-  State<Notes> createState() => NotesState();
-}
-
-class NotesState extends State<Notes> {
-  int indx = 0;
-  @override
-  void initState() {
-    BlocProvider.of<NotesCubit>(context).getNotes();
-    super.initState();
-  }
-
-  @override
-  Scaffold build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -82,7 +70,7 @@ class NotesState extends State<Notes> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: state.notes?.length ?? 0,
                       itemBuilder: (context, index) {
-                        return noteItem(index, state.notes![index]);
+                        return noteItem(context, index, state.notes![index]);
                       },
                     );
                   }
@@ -110,7 +98,7 @@ class NotesState extends State<Notes> {
     );
   }
 
-  Widget noteItem(int index, Map result) {
+  Widget noteItem(BuildContext context, int index, Map result) {
     return Column(
       children: [
         Container(
@@ -131,7 +119,9 @@ class NotesState extends State<Notes> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => NoteDetail(
-                          title: result['Title'], note: result['Note']),
+                        title: result['Title'],
+                        note: result['Note'],
+                      ),
                     ),
                   );
                 },

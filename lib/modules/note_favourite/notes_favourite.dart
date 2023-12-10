@@ -4,14 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../models/notes_cubit.dart';
 import '../note_details/note_details.dart';
 
-class NotesFavourite extends StatefulWidget {
+class NotesFavourite extends StatelessWidget {
   const NotesFavourite({super.key});
 
-  @override
-  State<NotesFavourite> createState() => _NotesFavouriteState();
-}
-
-class _NotesFavouriteState extends State<NotesFavourite> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,8 +74,8 @@ class _NotesFavouriteState extends State<NotesFavourite> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: favouriteNotes.length,
                         itemBuilder: (context, index) {
-                          return noteItem(
-                              favouriteNotes[index], favouriteIndices[index]);
+                          return noteItem(context, favouriteNotes[index],
+                              favouriteIndices[index]);
                         },
                       );
                     } else {
@@ -114,7 +109,7 @@ class _NotesFavouriteState extends State<NotesFavourite> {
     );
   }
 
-  Widget noteItem(Map result, int favouriteIndex) {
+  Widget noteItem(BuildContext context, Map result, int favouriteIndex) {
     return Column(
       children: [
         Container(

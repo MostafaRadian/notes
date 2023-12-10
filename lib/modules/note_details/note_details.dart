@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class NoteDetail extends StatelessWidget {
-  String title;
-  String note;
+  final String title;
+  final String note;
 
-  NoteDetail({super.key, required this.title, required this.note});
+  const NoteDetail({super.key, required this.title, required this.note});
 
   @override
   Widget build(BuildContext context) {
