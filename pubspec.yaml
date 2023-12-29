@@ -19,6 +19,7 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "/Users/mostafaahmed/Documents/Flutter projects/notes_app/assets/1024.png"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
