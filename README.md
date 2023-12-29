@@ -10,15 +10,6 @@ A simple and efficient notes app built with Flutter, following the Cubit archite
 - **Data Persistence**: All notes are stored locally using the reliable SQFLite database.
 - **State Management**: Utilizes the powerful Cubit package for efficient state management.
 
-### Screenshots
-
-![Screen Shot 2023-10-30 at 4 44 49 AM](https://github.com/MostafaRadian/notes/assets/46004434/59fa8a3e-2d0f-4c90-9439-8e58aef77ede)
-![Screen Shot 2023-10-30 at 4 45 11 AM](https://github.com/MostafaRadian/notes/assets/46004434/14da78c2-6127-466f-876c-4833d453f3f4)
-![Screen Shot 2023-10-30 at 4 45 55 AM](https://github.com/MostafaRadian/notes/assets/46004434/54dbf986-7dfa-4b23-b545-7bb6d7fe43bd)
-![Screen Shot 2023-10-30 at 4 46 17 AM](https://github.com/MostafaRadian/notes/assets/46004434/fd062780-82a1-4230-aae1-3862ca20b3b5)
-![Screen Shot 2023-10-30 at 4 46 31 AM](https://github.com/MostafaRadian/notes/assets/46004434/7df17c0a-05dd-467a-b4fd-49b45cae225c)
-
-
 
 ### How to Use
 
@@ -36,17 +27,15 @@ A simple and efficient notes app built with Flutter, following the Cubit archite
 - `bloc`: A predictable state management library for Dart.
 
 
-### Directory Structure
-
-```|-- lib|   |-- models|   |   |-- database_helper.dart|   |   |-- notes_cubit.dart|   |   |-- notes_state.dart|   |-- modules|   |   |-- new_note|   |   |   |-- new_note.dart|   |-- main.dart|-- screenshots|   |-- screenshot1.png|   |-- screenshot2.png|-- README.md```
-
-
-### Contributing
-
-Contributions are welcome! If you encounter any issues or have suggestions for improvements, please feel free to submit a pull request or open an issue.
-
-
 ### License
 
-This project is licensed under the MIT License
-- see the [LICENSE](LICENSE) file for details.---Feel free to modify the description as needed and include additional sections such as "Installation," "Contributing Guidelines," or any other relevant information.
+This project is licensed under the [MIT License](LICENSE). Feel free to modify and use the code according to your needs.
+
+
+### Screenshots
+
+![Screen Shot 2023-10-30 at 4 44 49 AM](https://github.com/MostafaRadian/notes/assets/46004434/59fa8a3e-2d0f-4c90-9439-8e58aef77ede)
+![Screen Shot 2023-10-30 at 4 45 11 AM](https://github.com/MostafaRadian/notes/assets/46004434/14da78c2-6127-466f-876c-4833d453f3f4)
+![Screen Shot 2023-10-30 at 4 45 55 AM](https://github.com/MostafaRadian/notes/assets/46004434/54dbf986-7dfa-4b23-b545-7bb6d7fe43bd)
+![Screen Shot 2023-10-30 at 4 46 17 AM](https://github.com/MostafaRadian/notes/assets/46004434/fd062780-82a1-4230-aae1-3862ca20b3b5)
+![Screen Shot 2023-10-30 at 4 46 31 AM](https://github.com/MostafaRadian/notes/assets/46004434/7df17c0a-05dd-467a-b4fd-49b45cae225c)
